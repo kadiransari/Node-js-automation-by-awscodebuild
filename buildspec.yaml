@@ -20,6 +20,7 @@ phases:
     commands:
       - echo Build started on `date`
       #- npm run build              # Assuming there is a build script in package.json
+      - IMAGE_TAG=$(date +%Y%m%d%H%M%S)
       - docker build -t kadiransari7208 .
       - docker tag kadiransari7208:latest 650251726031.dkr.ecr.ap-south-1.amazonaws.com/kadiransari7208:latest
       - docker push 650251726031.dkr.ecr.ap-south-1.amazonaws.com/kadiransari7208:latest

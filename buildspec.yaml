@@ -12,8 +12,8 @@ phases:
       - echo Pre-build phase...
       #- npm run lint   # Run linting checks if any
       - aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 650251726031.dkr.ecr.ap-south-1.amazonaws.com
-      - aws configure set aws_access_key_id AKIAZOZQF5THZHMIT5PQ
-      - aws configure set aws_secret_access_key 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
+      - aws configure set aws_access_key_id ####################
+      - aws configure set aws_secret_access_key #################################
       - aws configure set default.region ap-south-1
      
   build:

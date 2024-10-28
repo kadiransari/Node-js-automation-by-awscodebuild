@@ -1,0 +1,51 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      nodejs: 16                   # Define the Node.js version
+    commands:
+      - echo Installing dependencies...
+      - npm install
+
+  pre_build:
+    commands:
+      - echo Pre-build phase...
+      #- npm run lint   # Run linting checks if any
+      - aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 650251726031.dkr.ecr.ap-south-1.amazonaws.com
+      - aws configure set aws_access_key_id AKIAZOZQF5THZHMIT5PQ
+      - aws configure set aws_secret_access_key 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
+      - aws configure set default.region ap-south-1
+     
+  build:
+    commands:
+      - echo Build started on `date`
+      #- npm run build              # Assuming there is a build script in package.json
+      - docker build -t kadiransari7208 .
+      - docker tag kadiransari7208:latest 650251726031.dkr.ecr.ap-south-1.amazonaws.com/kadiransari7208:latest
+      - docker push 650251726031.dkr.ecr.ap-south-1.amazonaws.com/kadiransari7208:latest
+  post_build:
+    commands:
+      - echo Post-build phase...
+      - docker tag kadiransari7208:latest 650251726031.dkr.ecr.ap-south-1.amazonaws.com/kadiransari7208:latest
+      - docker push 650251726031.dkr.ecr.ap-south-1.amazonaws.com/kadiransari7208:latest
+      - echo Applying Kubernetes manifests...
+      #- npm run test               # Run tests if any
+      - aws eks --region ap-south-1 update-kubeconfig --name kadir-cluster
+      - aws eks --region ap-south-1 update-kubeconfig --name kadir-cluster
+      - kubectl get nodes
+      - kubectl get all
+      - kubectl apply -f configmap.yaml
+      - kubectl apply -f nodejs-db-deployment.yaml
+      - kubectl apply -f nodedb-service.yaml
+      - kubectl apply -f nodemongodb-service.yaml
+      - echo Build completed on `date`
+
+artifacts:
+  files:
+    - '**/*'                       # Include all files, or specify the artifacts you want to keep
+  discard-paths: yes               # Optional: Keep a flat folder structure
+
+cache:
+  paths:
+    - node_modules/**              # Cache dependencies to speed up builds
+

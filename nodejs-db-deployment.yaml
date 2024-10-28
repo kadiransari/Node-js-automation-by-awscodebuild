@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodejs-db-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: node-app
+  template:
+    metadata:
+      labels:
+        app: node-app
+    spec:
+      containers:
+      - name: node-js-container
+        image: 650251726031.dkr.ecr.ap-south-1.amazonaws.com/kadiransari7208:latest
+      - name: node-js-mongo-container
+        image: mongo          
+        env:
+          - name: MONGO_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: mongo-config 
+                key: MONGO_HOST
+          - name: MONGO_PORT
+            valueFrom:  
+              configMapKeyRef:
+                name: mongo-config
+                key: MONGO_PORT
+      

@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: node-js-container
-        image: 650251726031.dkr.ecr.ap-south-1.amazonaws.com/kadiransari7208:latest
+        image: kadiransari7208/node-js-db-app:02
       - name: node-js-mongo-container
         image: mongo          
         env:
